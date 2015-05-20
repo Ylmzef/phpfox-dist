@@ -1,0 +1,127 @@
+
+#panel {
+	.js_friend_search_link {
+		border-bottom:1px darken(@blockBg, 6%) solid;
+		padding:4px 0px;
+		cursor:pointer;
+	}
+}
+
+.js_temp_friend_search_form_holder {
+	background:@blockBg;
+	color:@blockColor;
+	border:1px @blockBg solid;
+
+	.js_friend_search_link {
+		> span {
+			img, .no_image_user {
+				max-width:32px;
+				max-height:32px;
+				padding:0px;
+			}
+
+			display:inline-block;
+			vertical-align:middle;
+			margin-right:6px;
+		}
+	}
+}
+
+.js_friend_search_link:hover {
+	background:darken(@blockBg, 6%);
+	transition:@transition;
+}
+
+.js_custom_search_friend_holder {
+	border:@formBorder;
+	background:@formBg;
+	padding:0px;
+
+	> ul {
+		margin:10px;
+
+		> li {
+			border:0px;
+			padding:2px 20px 2px 4px;
+			display:inline-block;
+			margin:0px 8px 8px 0px;
+			background:@blockBg;
+			color:@blockColor;
+
+			.friend_search_image, .friend_search_name {
+				.reset();
+				display:inline-block;
+				vertical-align:middle;
+				margin-right:5px;
+			}
+
+			.friend_search_image {
+				margin-top:5px;
+			}
+		}
+
+		> li:hover {
+			background:@brandPrimary;
+			color:@brandPrimaryColor;
+		}
+	}
+}
+
+#js_friend_search_content {
+	.friend_search_holder {
+		font-size:@fontSizeBase - 2;
+	}
+}
+
+#js_friend_loader input {
+	.full_input();
+}
+
+.friend_search_holder, .friend_search_holder:hover {
+	.reset();
+	background:transparent;
+	display:inline-block;
+	width:31%;
+	margin:0px 6px 10px 0px;
+	vertical-align:top;
+
+	> span {
+		display:inline-block;
+		vertical-align:middle;
+	}
+}
+
+.friend_search_holder:hover {
+	background:darken(@blockBg, 5%);
+}
+
+.friend_search_active, .friend_search_active:hover {
+	background:@brandPrimary;
+	color:@brandPrimaryColor;
+}
+
+.friend_search_holder_active, .friend_search_holder_active:hover {
+	background:transparent;
+	color:inherit;
+	opacity:0.4;
+}
+
+.fullContent(page_friend_profile);
+
+#js_block_content_profile_friend {
+	.user_rows_mini .user_rows {
+		width:81px;
+		height:110px;
+	}
+
+	.user_rows .user_profile_link_span > a, .user_rows .user_profile_link_span > a:hover {
+		text-align:left;
+		text-indent:2px;
+	}
+
+	._size__120 > span, ._size__120:hover > span {
+		top:20px;
+		left:0px;
+		width:81px;
+	}
+}
