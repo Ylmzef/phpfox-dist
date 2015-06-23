@@ -319,9 +319,10 @@ div.forum_content {
 	display:block;
 	height:30px;
 	position:relative;
+	visibility:hidden;
 
 	a, a:hover {
-		display:none;
+		display:block;
 		right:10px;
 		top:5px;
 		position:absolute;
@@ -329,28 +330,35 @@ div.forum_content {
 		height:20px;
 		text-indent:-1000px;
 		overflow:hidden;
-		background:red;
+		color:@blockColor;
+	}
+
+	a:before {
+		.fa('\f10d');
+		position:absolute;
+		right:0px;
+		top:0px;
+		font-size:20px;
 	}
 }
 
 .forum_outer:hover {
-	.forum_quote a {
-		display:block;
+	.forum_quote {
+		visibility:visible;
 	}
 }
-
-
 
 .forum_header_menu {
 	.reset();
 
 	position:absolute;
-	top:5px;
-	right:5px;
+	top:35px;
+	right:20px;
 	z-index:20;
 }
 
 ._forum_title {
+	padding-left:10px;
 	margin-right:175px;
 	header {
 		h1 {
@@ -378,6 +386,10 @@ div.forum_content {
 }
 
 #page_forum_index {
+	#content .block > .content {
+		padding:0px;
+	}
+
 	#content .block > .title, #content .block_clear > .title {
 		position:relative;
 
@@ -388,11 +400,11 @@ div.forum_content {
 		.toggle {
 			position:absolute;
 			right:10px;
-			top:10px;
+			top:15px;
 			cursor:pointer;
 
 			i {
-				color:darken(@blockTitleBg, 10%);
+				color:darken(@bodyBg, 10%);
 			}
 		}
 	}
@@ -511,9 +523,12 @@ span.forum_tag_sticky {
 }
 
 .thread_view_holder {
+	/*
 	display:table;
 	width:100%;
+	*/
 
+	/*
 	> section {
 		display:table-cell;
 		width:50%;
@@ -525,6 +540,7 @@ span.forum_tag_sticky {
 		padding-left:10px;
 		padding-right:0px;
 	}
+	*/
 
 	.thread_replies {
 		> h1 {
@@ -542,7 +558,7 @@ span.forum_tag_sticky {
 
 /*.threeColumn(page_forum_forum);*/
 
-#page_forum_thread {
+#___page_forum_thread {
 	div.sub_menu_bar_main {
 		right:10px;
 		top:-62px;
@@ -621,6 +637,7 @@ span.forum_tag_sticky {
 #right #js_block_border_forum_recent.block {
 	background:transparent;
 
+	/*
 	.title {
 		background:transparent;
 		color:@textColor;
@@ -629,9 +646,10 @@ span.forum_tag_sticky {
 		font-size:11px;
 		padding:0px;
 	}
+	*/
 
 	.content {
-		padding:0px;
+		/*padding:0px;*/
 	}
 
 	.table_row.forum_row {
@@ -733,15 +751,18 @@ span.forum_tag_sticky {
 }
 
 #page_forum_thread {
-	._block_h1 {
+	#content ._block_h1 {
 		position:fixed;
 		top:@headerHeight;
-		left:@navWidth;
-		right:0px;
-		z-index:100;
+		left:@navWidth + 10;
+		right:auto;
+		z-index:2001;
+		display:inline;
+		background:transparent;
+		border:0px;
 	}
 
-	._block_h1 > h1 {
+	#content ._block_h1 > h1 {
 
 		position:static;
 		/*

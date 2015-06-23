@@ -1,8 +1,14 @@
 
 var PF = {
 	url: {
-		send: function(url, relocation) {
+		make: function(url) {
 			url = getParam('sJsHome') + trim(url, '/');
+
+			return url;
+		},
+
+		send: function(url, relocation) {
+			url = PF.url.make(url);
 			if (relocation) {
 				window.location.href = url;
 				return;
@@ -1742,6 +1748,7 @@ $Core.show_page = function($aParams)
 		}
 	}
 
+	$('#public_message').remove();
 	$('._block_menu_sub').html($aParams['menuSub']);
 	$('._block_top').html($aParams['search']);
 	$('._block_breadcrumb').html($aParams['breadcrumb']);
@@ -1929,6 +1936,7 @@ $Core.loadInit = function(forceIt)
 		setTimeout(function(){ 
 			$Core.loadInit();
 		}, 20);
+
 		return false;
 	}
 	
@@ -1943,7 +1951,7 @@ $Core.loadInit = function(forceIt)
 };
 
 $Core.init = function()
-{	
+{
 	if ($Core.hasPushState())
 	{
 		window.addEventListener("popstate", function(e) {

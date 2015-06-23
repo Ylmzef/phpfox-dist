@@ -34,7 +34,7 @@
 .button(@bg: @brandPrimary, @color: @brandPrimary) {
 	display:block;
 	text-align:center;
-	border:3px @bg solid;
+	border:1px @bg solid;
 	height:30px;
 	line-height:30px;
 	padding:0px 10px;
@@ -85,11 +85,11 @@
 .full_input() {
 	background:@formBg;
 	color:@formColor;
-	border:@formBorder;
-	padding:10px 0px;
+	border:0px;
+	padding:5px 0px;
 	width:100%;
 	outline:none;
-	text-indent:10px;
+	text-indent:0px;
 }
 
 .block_menu() {
@@ -129,6 +129,8 @@
 
 			> .title {
 				text-transform:uppercase;
+				background:@blockBg;
+				color:@blockColor;
 				font-size:@fontSizeBase;
 				border:0px;
 				height:40px;
@@ -161,13 +163,15 @@
 
 			> .content {
 				display:none;
-				max-height:300px;
+				max-height:250px;
 				overflow:auto;
-				position:absolute;
 				background:@blockBg;
+				/*
+				position:absolute;
 				left:0px;
 				right:0px;
-				z-index:100;
+				*/
+				padding:10px;
 			}
 		}
 
@@ -239,7 +243,7 @@
 .fullContent(@id) {
 	#@{id} {
 		#content {
-			width:auto;
+			width:100%;
 		}
 	}
 }
@@ -264,3 +268,41 @@
 .userImage(50);
 .userImage(200);
 .userImage(32);
+
+.loopingClass(@className, @index) when (@index > 0) {
+
+	@newIndex: (@index * 10);
+	@total: percentage((@index) * 0.1);
+	@padding: ((@blockContentPadding / 2) * 2);
+
+	.@{className}-@{newIndex} {
+		width: ~"calc(@{total} - @{padding})";
+		float:left;
+		vertical-align:top;
+		word-wrap: break-word;
+		padding:(@blockContentPadding / 2);
+	}
+
+	.loopingClass(@className, (@index - 1));
+}
+
+.loopingClass (@className, 0) {}
+
+.loopingClassBrand(@className, @index) when (@index > 0) {
+
+	@newIndex: (@index * 10);
+
+	.@{className}-@{newIndex} {
+		& when (@className = margin) {
+			margin:@newIndex + 0px;
+		}
+		& when (@className = margin-bottom) {
+			margin-bottom:@newIndex + 0px;
+
+		}
+	}
+
+	.loopingClassBrand(@className, (@index - 1));
+}
+
+.loopingClassBrand (@className, 0) {}

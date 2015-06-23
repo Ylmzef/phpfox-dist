@@ -10,7 +10,8 @@
 .js_temp_friend_search_form_holder {
 	background:@blockBg;
 	color:@blockColor;
-	border:1px @blockBg solid;
+	border:1px darken(@blockBg, 8%) solid;
+	padding:0px;
 
 	.js_friend_search_link {
 		> span {
@@ -30,6 +31,7 @@
 .js_friend_search_link:hover {
 	background:darken(@blockBg, 6%);
 	transition:@transition;
+	cursor:pointer;
 }
 
 .js_custom_search_friend_holder {
@@ -110,7 +112,7 @@
 
 #js_block_content_profile_friend {
 	.user_rows_mini .user_rows {
-		width:81px;
+		width:79px;
 		height:110px;
 	}
 
@@ -124,4 +126,50 @@
 		left:0px;
 		width:81px;
 	}
+}
+
+.list_manager_holder {
+	position:relative;
+}
+
+.list_manager {
+	position:absolute;
+	left:0px;
+	top:0px;
+	right:0px;
+	bottom:0px;
+	display:block;
+	z-index:100000;
+	i {
+		display:none;
+		font-size:40px;
+		position:absolute;
+		left:50%;
+		top:50%;
+		margin-left:-20px;
+		margin-top:-20px;
+	}
+}
+
+.list_manager.active, .list_manager:hover {
+	background:rgba(0, 0, 0, 0.6);
+	i {
+		display:block;
+	}
+}
+
+.list_manager.active {
+	background:rgba(255, 255, 255, 0.6);
+	i {
+		color:@brandPrimary;
+	}
+}
+
+#sFriendImage {
+	border:1px @brandPrimary dashed;
+}
+
+#sFriendInput {
+	background:darken(@blockBg, 5%);
+	color:@blockColor;
 }

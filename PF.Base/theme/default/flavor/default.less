@@ -61,8 +61,8 @@
 
 @blockTitleBg: darken(@blockBg, 2%);
 @blockTitlePadding: 10px;
-@blockTitleColor: darken(@blockColor, 10%);
-@blockTitleSize: 16px;
+@blockTitleColor: #222;
+@blockTitleSize: 18px;
 
 @blockContentPadding: 10px;
 @blockContentSize: @fontSizeBase - 1;
@@ -70,9 +70,9 @@
 @hoverCategories: true;
 
 //== Forms
-@formBg: #e5e5e5;
-@formColor: #808080;
-@formBorder: 1px #dfdfdf solid;
+@formBg: @blockBg;
+@formColor: @blockColor;
+@formBorder: 1px transparent solid;
 
 @import "../../../less/autoload";
 

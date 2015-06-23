@@ -139,7 +139,7 @@ div.row_title_info div.extra_info {
 .item_bar {
 	position:absolute;
 	padding:0px;
-	right:0px;
+	right:15px;
 	top:0px;
 	z-index:10;
 }
@@ -212,12 +212,12 @@ a.item_bar_action:before {
 }
 
 .user_rows_mini {
-	margin:-@blockContentPadding;
+	/*margin:-@blockContentPadding;*/
 
 	.user_rows {
-		width:98px;
+		width:96px;
 		height:120px;
-		margin:0px -4px -4px 0px;
+		margin:0px -1px -1px 0px;
 		border-color:@blockBg;
 
 		.user_profile_link_span > a, .user_profile_link_span > a:hover {
@@ -320,3 +320,35 @@ a.item_bar_action:before {
 .js_attachment_list {
 	padding-bottom:50px;
 }
+
+.row {
+	background:@blockBg;
+	border-bottom:1px darken(@blockBg, 8%) solid;
+	padding:@blockContentPadding;
+
+	p {
+		margin-bottom:10px;
+		font-weight:300;
+	}
+
+	.loopingClass(row, 10);
+}
+
+.row-transparent {
+	background:transparent;
+	border:0px;
+	padding:0px;
+}
+
+.row:before,
+.row:after {
+	content: " ";
+	display: table;
+}
+
+.row:after {
+	clear: both;
+}
+
+.loopingClassBrand(margin, 10);
+.loopingClassBrand(margin-bottom, 10);

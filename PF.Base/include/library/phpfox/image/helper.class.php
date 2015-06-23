@@ -16,13 +16,12 @@ defined('PHPFOX') or exit('NO DICE!');
  * @version 		$Id: helper.class.php 7287 2014-04-28 16:29:52Z Fern $
  */
 class Phpfox_Image_Helper
-{	
+{
 	/**
-	 * Class constructor
-	 *
+	 * @return Phpfox_Image_Helper
 	 */
-	public function __construct()
-	{			
+	public static function instance() {
+		return Phpfox::getLib('image.helper');
 	}
 	
 	/**
@@ -50,7 +49,7 @@ class Phpfox_Image_Helper
 		{
 			if ($sImage !== null && (!file_exists($sImage) || filesize($sImage) < 1))
 			{
-				return array(0,0);
+				return array(0, 0);
 			}
 		}
 			
@@ -184,7 +183,16 @@ class Phpfox_Image_Helper
 				$sLink = Phpfox_Url::instance()->makeUrl('profile', $aParams['user'][$sSuffix . 'user_name']);
 			}
 			
-			if (Phpfox::getParam('user.prevent_profile_photo_cache') && isset($aParams['user'][$sSuffix . 'user_id']) && $aParams['user'][$sSuffix . 'user_id'] == Phpfox::getUserId())
+			if (Phpfox::getParam('user.prevent_profile_photo_cache')
+				&& isset($aParams['user'][$sSuffix . 'user_id'])
+				&& $aParams['user'][$sSuffix . 'user_id'] == Phpfox::getUserId())
+			{
+				$aParams['time_stamp'] = true;
+			}
+
+			if (Phpfox::getCookie('recache_image')
+				&& isset($aParams['user'][$sSuffix . 'user_id'])
+				&& $aParams['user'][$sSuffix . 'user_id'] == Phpfox::getUserId())
 			{
 				$aParams['time_stamp'] = true;
 			}

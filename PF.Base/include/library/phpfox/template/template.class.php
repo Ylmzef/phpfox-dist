@@ -256,6 +256,9 @@ class Phpfox_Template
 	private $_theme;
 	private $_meta;
 	private $_keepBody = false;
+	private $_subMenu = [];
+
+	public $delayedHeaders = [];
 	
 	/**
 	 * Class constructor we use to build the current theme and style
@@ -580,9 +583,8 @@ class Phpfox_Template
 	 * @return $this
 	 */
 	public function setBreadCrumb($sPhrase, $sLink = '', $bIsTitle = false)
-	{		
+	{
 		(($sPlugin = Phpfox_Plugin::get('template_template_setbreadcrump')) ? eval($sPlugin) : false);
-		
 		if (is_array($sPhrase))
 		{
 			foreach ($sPhrase as $aPhrase)
@@ -1043,7 +1045,32 @@ class Phpfox_Template
 			$this->setHeader(array('custom.css' => 'style_css'));
 		}
 
+		if ($this->delayedHeaders) {
+			foreach ($this->delayedHeaders as $header) {
+				$this->setHeader('cache', $header);
+			}
+		}
+
+		// $this->setHeader('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">');
+
 		Core\Event::trigger('lib_phpfox_template_getheader', $this);
+
+		foreach ((new Core\App())->all() as $App) {
+			if ($App->head && is_array($App->head)) {
+				foreach ($App->head as $head) {
+					$this->setHeader($head);
+				}
+			}
+
+			if ($App->settings) {
+				$Setting = new Core\Setting();
+				foreach ($App->settings as $key => $setting) {
+					if (isset($setting->js_variable)) {
+						$this->setHeader('<script>var ' . $key . ' = "' . $Setting->get($key) . '";</script>');
+					}
+				}
+			}
+		}
 
 		$aArrayData = array();
 		$sData = '';
@@ -1899,6 +1926,25 @@ class Phpfox_Template
 			$this->_sFooter .= '</div>';
 		}
 
+		// $this->_sFooter .= '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>';
+
+		foreach ((new Core\App())->all() as $App) {
+			if ($App->js && is_array($App->js)) {
+				foreach ($App->js as $js) {
+					$this->_sFooter .= '<script src="' . $js . '"></script>';
+				}
+			}
+		}
+
+		if (Phpfox::isUser()) {
+			$image = Phpfox_Image_Helper::instance()->display([
+				'user' => Phpfox::getUserBy(),
+				'suffix' => '_50_square',
+				'return_url' => true
+			]);
+			$this->_sFooter .= '<div id="auth-user" data-id="' . Phpfox::getUserId() . '" data-name="' . Phpfox::getUserBy('full_name') . '" data-image="' . $image . '"></div>';
+		}
+
 		return $this->_sFooter;
 	}
 
@@ -2517,7 +2563,7 @@ class Phpfox_Template
 		}		
 		
 		$sCachedId = $oCache->set(array('theme', 'menu_' . str_replace(array('/', '\\'), '_', $sConnection) . (Phpfox::isUser() ? Phpfox::getUserBy('user_group_id') : 0)));
-		
+
 		if ((!($aMenus = $oCache->get($sCachedId))) && is_bool($aMenus) && !$aMenus)
 		{
 			$aParts = explode('.', $sConnection);		
@@ -2916,6 +2962,38 @@ class Phpfox_Template
 				'aFilterMenus' => $aFilterMenuCache,
 			)
 		);	
+	}
+
+	public function setSubMenu($menu) {
+		$this->_subMenu = $menu;
+	}
+
+	public function getSubMenu() {
+		if (!$this->_subMenu) {
+			return '';
+		}
+
+		$current = trim(Phpfox_Request::instance()->uri(), '/');
+		if (is_string($this->_subMenu)) {
+			$current = Phpfox_Url::instance()->makeUrl($current);
+			$this->_subMenu = preg_replace('/href\=\"' . preg_quote($current, '/') . '\"/i', 'href="' . $current . '" class="active"', $this->_subMenu);
+
+			return $this->_subMenu;
+		}
+
+		$html = '<div class="section_menu"><ul>';
+		foreach ($this->_subMenu as $name => $url) {
+			$active = '';
+			$check = trim($url, '/');
+			if ($check == $current) {
+				$active = ' class="active"';
+			}
+
+			$html .= '<li><a href="' . Phpfox_Url::instance()->makeUrl($url) . '"' . $active . '>' . $name . '</a></li>';
+		}
+		$html .= '</ul></div>';
+
+		return $html;
 	}
 	
 	/**

@@ -6,5 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    $vendorDir . '/wixel/gump/gump.class.php',
     $vendorDir . '/ircmaxell/password-compat/lib/password.php',
 );

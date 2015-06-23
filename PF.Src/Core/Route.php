@@ -6,6 +6,7 @@ namespace Core;
  * Class Route
  * @package Core
  *
+ * @method Route auth($authenticate)
  * @method Route run($callback)
  * @method Route accept($methods)
  * @method Route call($class)
@@ -14,12 +15,17 @@ namespace Core;
  */
 class Route {
 	public static $routes = [];
+	public static $group;
 
 	private static $_active;
 
-	public function __construct($route) {
+	public function __construct($route, \Closure $callback = null) {
 		if (!self::$routes) {
-			self::$routes = require(PHPFOX_DIR_SETTING . 'routes.sett.php');
+			$routes = require(PHPFOX_DIR_SETTING . 'routes.sett.php');
+			self::$routes = [];
+			foreach ($routes as $key => $value) {
+				self::$routes[trim($key, '/')] = $value;
+			}
 		}
 
 		if (is_array($route)) {
@@ -36,12 +42,32 @@ class Route {
 			}
 		}
 		else {
+			if (self::$group) {
+				$route = self::$group . $route;
+			}
+
 			$route = trim($route, '/');
 			self::$routes[$route] = [
-				'path' => \Core\Route\Controller::$active
+				'path' => \Core\Route\Controller::$active,
+				'id' => \Core\Route\Controller::$activeId
 			];
+			if ($callback instanceof \Closure) {
+				self::$routes[$route]['run'] = $callback;
+			}
 			self::$_active = $route;
 		}
+
+		$apps = \Core\App::$routes;
+		if ($apps) {
+			$_routes = [];
+			foreach ($apps as $key => $value) {
+				$_routes[trim($key, '/')] = $value;
+			}
+			// d(self::$routes); exit;
+			self::$routes = array_merge(self::$routes, (array) $_routes);
+		}
+
+		// d(self::$routes); exit;
 	}
 
 	public function __call($method, $args) {

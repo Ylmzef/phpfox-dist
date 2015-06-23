@@ -9,11 +9,19 @@ class Object extends \Core\Objectify {
 	public $path;
 	public $is_module = false;
 	public $icon;
-	public $version;
+	public $version = '1';
 	public $currentVersion;
-	public $unityId;
+	public $auth = [
+		'id' => '',
+		'key' => ''
+	];
 	public $admincpMenu;
 	public $settings = [];
+	public $webhooks = [];
+	public $routes = [];
+	public $head = [];
+	public $js = [];
+	public $map = [];
 
 	public function __construct($keys) {
 		parent::__construct($keys);
@@ -33,6 +41,29 @@ class Object extends \Core\Objectify {
 			$this->icon = '<div class="app_icons image_load" data-src="' . $this->icon . '"></div>';
 		}
 		$this->vendor = explode('/', $this->id)[0];
+
+		if (!$this->is_module) {
+			$file = PHPFOX_DIR_SETTINGS . md5($this->id . \Phpfox::getParam('core.salt')) . '.php';
+			if (!file_exists($file)) {
+				$id = md5(uniqid());
+				$key = md5(uniqid() . rand(0, 10000));
+				// throw new \Exception('App "' . $this->id . '" is missing auth file. Something went wrong with the install of this product.');
+				$response = [
+					'id' => $id,
+					'key' => $key
+				];
+				$paste = "<?php\n// @app ' . $this->id . ' \nreturn " . var_export((array) $response, true) . ';';
+				file_put_contents($file, $paste);
+			}
+			$this->auth = (object) require($file);
+		}
+	}
+
+	public function delete() {
+		$path = $this->path;
+		if (is_dir($path)) {
+			\Phpfox_File::instance()->delete_directory($path);
+		}
 	}
 
 	public function export() {
@@ -45,6 +76,10 @@ class Object extends \Core\Objectify {
 
 		$exclude = array('.git');
 		$filter = function ($file, $key, $iterator) use ($exclude) {
+			if ($file->getFileName() == 'app.lock' || $file->getFileName() == 'composer.phar') {
+				return false;
+			}
+
 			if ($iterator->hasChildren() && !in_array($file->getFilename(), $exclude)) {
 				return true;
 			}
@@ -71,6 +106,7 @@ class Object extends \Core\Objectify {
 		$zipArchive->close();
 
 		$name = \Phpfox_Parse_Input::instance()->cleanFileName($this->id);
+		$name .= '-v' . $this->version;
 		\Phpfox_File::instance()->forceDownload($zipFile, 'phpfox-app-' . $name . '.zip');
 
 		return $zipFile;

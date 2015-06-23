@@ -369,7 +369,12 @@ class Phpfox
 	 * @return object
 	 */
 	public static function getBlock($sClass, $aParams = array(), $bTemplateParams = false)
-	{		
+	{
+		if (is_array($sClass)) {
+			echo $sClass[0];
+			return;
+		}
+
 		return Phpfox_Module::instance()->getComponent($sClass, $aParams, 'block', $bTemplateParams);
 	}	
 	
@@ -609,7 +614,7 @@ class Phpfox
 			return $aValues[$sHash];
 		}
 		
-		$aFields = Phpfox::getService('user')->getUserFields();
+		$aFields = User_Service_User::instance()->getUserFields();
 		
 		$aValues[$sHash] = '';
 		foreach ($aFields as $sField)
@@ -1049,6 +1054,7 @@ class Phpfox
 			'common.css' => 'style_css',
 			'thickbox.css' => 'style_css',
 			'jquery.css' => 'style_css',
+			'comment.css' => 'style_css',
 			'pager.css' => 'style_css',
 			'jquery/jquery.js' => 'static_script',
 			'jquery/ui.js' => 'static_script',
@@ -1088,35 +1094,23 @@ class Phpfox
 			exit;
 		}
 
-		if (isset($_REQUEST['m9action'])) {
-			if ((empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW'])) && !isset($_GET['token'])) {
-				exit;
-			}
-
-			$response = null;
-			if (isset($_GET['token'])) {
-				$Home = new Core\Home(PHPFOX_LICENSE_ID, PHPFOX_LICENSE_KEY);
-				$response = $Home->install([
-					'type' => $_GET['type'],
-					'token' => $_GET['token']
-				]);
-
-				$_SERVER['PHP_AUTH_USER'] = PHPFOX_LICENSE_ID;
-				$_SERVER['PHP_AUTH_PW'] = PHPFOX_LICENSE_KEY;
-			}
-
-			$Home = new Core\Home($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
-			$Home->run($_REQUEST['m9action'], $response);
-		}
-
 		$oTpl = Phpfox_Template::instance();
 		$aLocale = Phpfox_Locale::instance()->getLang();
 		$oReq = Phpfox_Request::instance();
 		$oModule = Phpfox_Module::instance();
 
+		if ($oReq->segment(1) == 'favicon.ico') {
+			header('Content-type: image/x-icon');
+			echo file_get_contents('http://www.phpfox.com/favicon.ico');
+			exit;
+		}
+
 		$aStaticFolders = ['file', 'static', 'module', 'apps', 'themes'];
 		if (in_array($oReq->segment(1), $aStaticFolders) ||
-			($oReq->segment(1) == 'theme' && $oReq->segment(2) != 'demo')
+			(
+				$oReq->segment(1) == 'theme' && $oReq->segment(2) != 'demo'
+				&& $oReq->segment(1) == 'theme' && $oReq->segment(2) != 'sample'
+			)
 		) {
 			$sUri = Phpfox_Url::instance()->getUri();
 			if ($sUri == '/static/ajax.php') {
@@ -1215,7 +1209,7 @@ class Phpfox
 				$View = new Core\View();
 			}
 		}
-	
+
 		if (!PHPFOX_IS_AJAX_PAGE)
 		{
 				$oTpl->setImage(array(
@@ -1267,8 +1261,7 @@ class Phpfox
 					$oTpl->setHeader('<script type="text/javascript" src="' . $sUrl . '"></script>');
 				}
 		}
-			
-		
+
 		if ($sPlugin = Phpfox_Plugin::get('get_controller'))
 		{
 			eval($sPlugin);
@@ -1279,7 +1272,7 @@ class Phpfox
 		]);
 
 		$oModule->getController();
-		
+
 		Phpfox::getService('admincp.seo')->setHeaders();
 		
 		if (!defined('PHPFOX_DONT_SAVE_PAGE'))
@@ -1403,15 +1396,29 @@ class Phpfox
 		if ((!PHPFOX_IS_AJAX_PAGE && $oTpl->sDisplayLayout && !isset($View))
 			|| (!PHPFOX_IS_AJAX_PAGE && self::isAdminPanel())
 		)
-		{			
+		{
 			$oTpl->getLayout($oTpl->sDisplayLayout);
 		}
 
 		if (PHPFOX_IS_AJAX_PAGE) {
 			header('Content-type: application/json');
 
-			Phpfox_Module::instance()->getControllerTemplate();
-			$content = ob_get_contents(); ob_clean();
+			/*
+			if (isset($View) && $View instanceof \Core\View) {
+				$content = $View->getContent();
+			}
+			else {
+				Phpfox_Module::instance()->getControllerTemplate();
+				$content = ob_get_contents(); ob_clean();
+			}
+			*/
+			if ($View instanceof \Core\View){
+				$content = $View->getContent();
+			}
+			else {
+				Phpfox_Module::instance()->getControllerTemplate();
+				$content = ob_get_contents(); ob_clean();
+			}
 
 			$oTpl->getLayout('breadcrumb');
 			$breadcrumb = ob_get_contents(); ob_clean();
@@ -1450,6 +1457,9 @@ class Phpfox
 
 			$blocks = [];
 			foreach (range(1, 12) as $location) {
+				if ($location == 3) {
+					echo \Phpfox_Template::instance()->getSubMenu();
+				}
 				$aBlocks = Phpfox_Module::instance()->getModuleBlocks($location);
 				$blocks[$location] = [];
 				foreach ($aBlocks as $sBlock) {

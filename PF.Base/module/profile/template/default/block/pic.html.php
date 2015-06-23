@@ -60,9 +60,17 @@ defined('PHPFOX') or exit('NO DICE!');
 		    {/if}
 		</div>
 		{if Phpfox::getUserId() == $aUser.user_id}
-		<div class="p_4">
-			<a href="{url link='user.photo'}">{phrase var='profile.change_picture'}</a>
-		</div>
+		{literal}
+		<script>
+			function changingProfilePhoto() {
+				$('.profile_image_holder').html('<i class="fa fa-circle-o-notch fa-spin"></i>');
+			};
+		</script>
+		{/literal}
+		<form class="p_4" method="post" enctype="multipart/form-data" action="#">
+			<input type="file" class="ajax_upload" value="Upload" name="image" data-url="{url link='user.photo'}" data-onstart="changingProfilePhoto">
+			<span href="{url link='user.photo'}">{phrase var='profile.change_picture'}</span>
+		</form>
 		{/if}
 	</div>
 
@@ -94,7 +102,7 @@ defined('PHPFOX') or exit('NO DICE!');
 		{if Phpfox::getUserId() == $aUser.user_id}
 		<ul>
 			<li>
-				<a href="#">
+				<a href="#" onclick="return false;">
 					<i class="fa fa-cog"></i>
 					<span>Manage</span>
 				</a>
@@ -102,8 +110,11 @@ defined('PHPFOX') or exit('NO DICE!');
 					{if Phpfox::getUserParam('profile.can_change_cover_photo')}
 					<li>
 						<a href="#" id="js_change_cover_photo" onclick="$Core.box('profile.logo', 500); return false;">
-							{if empty($aUser.cover_photo)}{phrase var='user.add_a_cover'}{else}{phrase var='user.change_cover'}{/if}
+							{if empty($aUser.cover_photo)}{phrase var='user.add_a_cover'}{else}Change Cover Photo{/if}
 						</a>
+						{if !empty($aUser.cover_photo)}
+						<li><a href="#" onclick="$('#cover_section_menu_drop').hide(); $.ajaxCall('user.removeLogo'); return false;">Remove Cover Photo</a></li>
+						{/if}
 						{*
 						<div id="cover_section_menu_drop">
 							<ul>
