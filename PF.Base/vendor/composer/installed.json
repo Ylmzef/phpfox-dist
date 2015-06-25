@@ -106,18 +106,18 @@
         "source": {
             "type": "git",
             "url": "https://github.com/dereuromark/MediaEmbed.git",
-            "reference": "6c40673cbf9d7a9e0d3731f98b45b2703b01636b"
+            "reference": "67cdd3fdca8e777896a34807844fc4b5e0b50f06"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/dereuromark/MediaEmbed/zipball/6c40673cbf9d7a9e0d3731f98b45b2703b01636b",
-            "reference": "6c40673cbf9d7a9e0d3731f98b45b2703b01636b",
+            "url": "https://api.github.com/repos/dereuromark/MediaEmbed/zipball/67cdd3fdca8e777896a34807844fc4b5e0b50f06",
+            "reference": "67cdd3fdca8e777896a34807844fc4b5e0b50f06",
             "shasum": ""
         },
         "require": {
             "php": ">=5.4"
         },
-        "time": "2015-06-05 15:23:34",
+        "time": "2015-06-24 17:24:28",
         "type": "library",
         "installation-source": "source",
         "autoload": {
