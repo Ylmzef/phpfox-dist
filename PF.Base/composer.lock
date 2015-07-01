@@ -193,12 +193,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "94a02330624e2693d0d44fa88d7409f1ae2bd39c"
+                "reference": "5c19601afd745145a70a44655d42c544c0bf4b17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/94a02330624e2693d0d44fa88d7409f1ae2bd39c",
-                "reference": "94a02330624e2693d0d44fa88d7409f1ae2bd39c",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/5c19601afd745145a70a44655d42c544c0bf4b17",
+                "reference": "5c19601afd745145a70a44655d42c544c0bf4b17",
                 "shasum": ""
             },
             "require": {
@@ -240,7 +240,7 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2015-06-29 06:26:32"
+            "time": "2015-06-29 21:30:32"
         },
         {
             "name": "twig/twig",
