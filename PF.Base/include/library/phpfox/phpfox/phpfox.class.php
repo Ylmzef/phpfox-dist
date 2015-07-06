@@ -45,7 +45,7 @@ class Phpfox
 	 * Product build number.
 	 *
 	 */
-	const PRODUCT_BUILD = '1436203974';
+	const PRODUCT_BUILD = '1436204222';
 	
 	/**
 	 * phpFox API server.
