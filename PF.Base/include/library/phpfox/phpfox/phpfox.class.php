@@ -45,7 +45,7 @@ class Phpfox
 	 * Product build number.
 	 *
 	 */
-	const PRODUCT_BUILD = '1435780658';
+	const PRODUCT_BUILD = '1436201244';
 	
 	/**
 	 * phpFox API server.
@@ -265,6 +265,10 @@ class Phpfox
 	 */
 	public static function getParam($sVar)
 	{
+		if ($sVar == 'core.cache_plugins' && PHPFOX_DEBUG) {
+			return false;
+		}
+
 		return Phpfox::getLib('setting')->getParam($sVar);
 	}
 	
