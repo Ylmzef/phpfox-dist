@@ -27,7 +27,7 @@ class Phpfox
 	/**
  	* Product Version : major.minor.maintenance [alphaX, betaX or rcX]
  	*/
-	const VERSION = '4.0.0';
+	const VERSION = '4.0.0rc2';
 	
 	/**
 	 * Product Code Name
@@ -45,7 +45,7 @@ class Phpfox
 	 * Product build number.
 	 *
 	 */
-	const PRODUCT_BUILD = '1436288827';
+	const PRODUCT_BUILD = '1436288901';
 	
 	/**
 	 * phpFox API server.
