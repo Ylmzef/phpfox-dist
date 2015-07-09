@@ -135,7 +135,8 @@ class Phpfox_Installer
 		'3.8.0',
 
 		'4.0.0rc1',
-		'4.0.0rc2'
+		'4.0.0rc2',
+		'4.0.0'
 	);
 	
 	private $_sTempDir = '';
@@ -174,6 +175,7 @@ class Phpfox_Installer
 
 		if (defined('PHPFOX_IS_UPGRADE'))
 		{
+			$this->_oTpl->assign('bIsUprade', true);
 			$this->_bUpgrade = true;			
 			
 			if (file_exists(PHPFOX_DIR . 'include' . PHPFOX_DS . 'settings' . PHPFOX_DS . 'server.sett.php'))
@@ -597,10 +599,13 @@ class Phpfox_Installer
 			$this->_pass('license');	
 		}
 		*/
+
+		/*
 		$byPass = false;
 		if ($this->_bUpgrade && defined('PHPFOX_LICENSE_ID') && defined('PHPFOX_LICENSE_KEY')) {
 			$byPass = true;
 		}
+		*/
 
 		$oValid = Phpfox_Validator::instance()->set(array('sFormName' => 'js_form', 'aParams' => array(
 					'license_id' => 'Provide a license ID.',
@@ -609,12 +614,14 @@ class Phpfox_Installer
 			)
 		);
 
-		if (($aVals = $this->_oReq->getArray('val')) || $byPass)
+		if (($aVals = $this->_oReq->getArray('val')))
 		{
+			/*
 			if ($byPass) {
 				$aVals['license_id'] = PHPFOX_LICENSE_ID;
 				$aVals['license_key'] = PHPFOX_LICENSE_KEY;
 			}
+			*/
 
 			$response = new stdClass();
 			// $response->valid = true;

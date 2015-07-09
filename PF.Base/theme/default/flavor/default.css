@@ -2430,12 +2430,37 @@ h3 {
 #page_core_index-visitor._is_guest_user .site_menu {
   display: none;
 }
-#page_core_index-member #header,
 #page_core_index-member #top {
+  min-height: 0px;
+  margin: 0px;
+  padding: 0px;
+}
+#page_core_index-member #header {
   display: none;
 }
 #page_core_index-member #main {
   padding-top: 10px;
+}
+div#announcement .js_announcement_close {
+  margin: 0px;
+}
+div#announcement {
+  padding: 10px;
+  margin: -10px 0px 0px 0px;
+  background: #f5f5f5;
+  color: #999999;
+  border: 0px;
+  border-left: 1px #f0f0f0 solid;
+}
+div#announcement .js_announcement_content {
+  margin: 0px;
+}
+div#announcement div.announcement_date {
+  margin-right: 20px;
+}
+#announcements_holder .article {
+  padding: 10px;
+  background: #ffffff;
 }
 #page_search_index .main_search_bar {
   position: relative;
@@ -3430,7 +3455,7 @@ div#right div.menu ul li.active {
 #pf_admin {
   position: fixed;
   bottom: 0px;
-  right: 10px;
+  right: 0px;
   background: #0c0c0c;
   color: #808080;
   z-index: 10000;
@@ -5046,18 +5071,39 @@ a.moderation_action:hover {
   text-indent: 0px;
 }
 .moderation_holder ul {
-  left: 10px;
+  left: 0px;
+  border: 0px;
+  background: #ffffff;
+  color: #999999;
 }
 .moderation_holder {
-  position: relative;
+  position: fixed;
   background: #ffffff;
-  padding: 10px;
+  border-top: 1px #e6e6e6 solid;
+  bottom: 0px;
+  left: 200px;
+  right: 0px;
+  z-index: 100;
+  padding: 0px;
+  height: 30px;
+  line-height: 30px;
+  border-left: 1px #e6e6e6 solid;
+  font-size: 12px !important;
 }
 a.moderation_action,
 a.moderation_action:hover {
   position: absolute;
-  right: 12px;
-  top: 12px;
+  right: 100px;
+  top: 0px;
+}
+a.moderation_drop,
+a.moderation_drop:hover {
+  height: 30px;
+  line-height: 30px;
+  border: 0px;
+  background: #298ada;
+  color: #ffffff;
+  text-indent: 5px;
 }
 a.moderation_action:hover,
 a.moderation_action_unselect {
@@ -5066,10 +5112,7 @@ a.moderation_action_unselect {
 }
 a.not_active,
 a.not_active:hover {
-  border-color: transparent;
-  background: transparent;
-  font-weight: normal;
-  opacity: 0.6;
+  opacity: 0.2;
 }
 .item_is_active,
 .item_is_not_active {
@@ -5416,6 +5459,10 @@ a.not_active:hover {
   z-index: 100000;
   display: block;
 }
+.js_box_full .js_box_title {
+  height: 40px;
+  line-height: 40px;
+}
 .js_box_full .js_box_content {
   position: absolute;
   left: 0px;
@@ -5446,8 +5493,15 @@ a.not_active:hover {
   color: #999999;
   overflow: auto;
 }
+.page_editor_data .table_header {
+  display: none;
+}
 .page_editor_data .table {
-  padding: 10px;
+  padding: 5px;
+  margin: 0px;
+}
+.page_editor_data .table .table_left {
+  padding-top: 5px;
 }
 .page_editor_data > div {
   padding: 10px;
@@ -6495,6 +6549,10 @@ div.comment_mini_end {
   width: 40px;
   height: 40px;
 }
+.feed_options:hover {
+  background: #595959;
+  color: #e5e5e5;
+}
 .feed_options:before {
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
@@ -7161,13 +7219,56 @@ div.forum_outer div.forum_user_info {
   opacity: 0.6;
   font-style: italic;
 }
+.forum_main .js_feed_comment_border {
+  background: transparent;
+  border-bottom: 1px #f0f0f0 solid;
+}
 div.forum_outer div.forum_user_info_holder {
   height: 70px;
 }
+div.forum_outer:hover div.comment_mini_content_border,
+div.forum_outer:hover .forum_quote {
+  opacity: 1;
+}
 div.forum_outer {
   background: #ffffff;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   position: relative;
+}
+div.forum_outer .feed_options,
+div.forum_outer .feed_like_link > ul > li > a,
+div.forum_outer .feed_options:hover,
+div.forum_outer .feed_like_link > ul > li > a:hover {
+  /*background:transparent;*/
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+div.forum_outer .feed_like_link {
+  left: 10px;
+}
+div.forum_outer .feed_options::before,
+div.forum_outer .feed_like_link > ul > li > a::before {
+  font-size: 15px;
+  top: 8px;
+}
+div.forum_outer .feed_options::before {
+  top: 10px;
+}
+div.forum_outer .feed_options,
+div.forum_outer .feed_options:hover {
+  right: auto;
+  left: 50px;
+}
+div.forum_outer div.comment_mini_content_border {
+  padding-bottom: 8px;
+  opacity: 0.6;
+}
+div.forum_outer .activity_like_holder {
+  margin-left: 130px;
+  padding-left: 0px;
+  text-align: right;
+  padding-right: 10px;
 }
 .forum_thread_photo {
   width: 50px;
@@ -7208,21 +7309,29 @@ div.forum_content {
 }
 .forum_quote {
   display: block;
-  height: 30px;
+  height: 40px;
   position: relative;
-  visibility: hidden;
+  opacity: 0.6;
 }
 .forum_quote a,
 .forum_quote a:hover {
   display: block;
-  right: 10px;
-  top: 5px;
+  left: 92px;
+  bottom: -36px;
   position: absolute;
-  width: 20px;
-  height: 20px;
+  width: 35px;
+  height: 35px;
   text-indent: -1000px;
   overflow: hidden;
-  color: #999999;
+  color: #b3b3b3;
+  background: #ebebeb;
+  border-radius: 50%;
+  z-index: 1000;
+  text-align: center;
+}
+.forum_quote a:hover {
+  background: #298ada;
+  color: #ffffff;
 }
 .forum_quote a:before {
   display: inline-block;
@@ -7235,9 +7344,12 @@ div.forum_content {
   text-indent: 0px !important;
   content: '\f10d';
   position: absolute;
-  right: 0px;
-  top: 0px;
-  font-size: 20px;
+  left: 50%;
+  top: 50%;
+  margin-left: -7px;
+  margin-top: -7px;
+  font-size: 15px;
+  display: block;
 }
 .forum_outer:hover .forum_quote {
   visibility: visible;
@@ -8702,9 +8814,30 @@ ul.activity_feed_form_attach li a:hover {
   display: block;
   cursor: pointer;
 }
+#content .photos_row:hover a.moderate_link {
+  display: block !important;
+}
 #content .photos_row {
   display: block;
   position: relative;
+}
+#content .photos_row ._moderator a.moderate_link_active {
+  background: rgba(0, 0, 0, 0.4);
+  display: block !important;
+}
+#content .photos_row a.moderate_link {
+  display: none !important;
+  padding: 0px 10px;
+}
+#content .photos_row ._moderator a.moderate_link_active i::before,
+#content .photos_row ._moderator a.moderate_link_active:hover i::before {
+  color: #fff;
+}
+#content .photos_row ._moderator {
+  position: absolute;
+  top: 0px;
+  left: -6px;
+  border: 0px;
 }
 #content .photos_row header {
   display: none;
