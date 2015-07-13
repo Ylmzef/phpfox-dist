@@ -376,10 +376,11 @@ class User_Service_Process extends Phpfox_Service
 			}
 		}
 
+		$password = (new Core\Hash())->make($aVals['password']);
 		$aInsert = array(
 			'user_group_id' => ($iUserGroupId === null ? NORMAL_USER_ID : $iUserGroupId),
 			'full_name' => $oParseInput->clean($aVals['full_name'], 255),
-			'password' => Phpfox::getLib('hash')->setHash($aVals['password'], $sSalt),
+			'password' => $password, //, Phpfox::getLib('hash')->setHash($aVals['password'], $sSalt),
 			'password_salt' => $sSalt,
 			'email' => $aVals['email'],
 			'joined' => PHPFOX_TIME,
@@ -1003,7 +1004,7 @@ class User_Service_Process extends Phpfox_Service
 				   
 			}
 		}
-		
+
 		if (true)
 		{			
 			if ($bForce)
@@ -1016,8 +1017,10 @@ class User_Service_Process extends Phpfox_Service
 					{
 						$oImage->createThumbnail(Phpfox::getParam('core.dir_user') . sprintf($sFileName, ''), Phpfox::getParam('core.dir_user') . sprintf($sFileName, '_' . $iSize), $iSize, $iSize);
 					}
+
 					$oImage->createThumbnail(Phpfox::getParam('core.dir_user') . sprintf($sFileName, ''), Phpfox::getParam('core.dir_user') . sprintf($sFileName, '_' . $iSize . '_square'), $iSize, $iSize, false);
-				
+
+					/*
 					if (defined('PHPFOX_IS_HOSTED_SCRIPT') || (Phpfox::getParam('core.allow_cdn') && !Phpfox::getParam('core.keep_files_in_server')))
 					{
 						if(file_exists(Phpfox::getParam('core.dir_user') . sprintf($sFileName, '_' . $iSize)))
@@ -1029,7 +1032,8 @@ class User_Service_Process extends Phpfox_Service
 							unlink(Phpfox::getParam('core.dir_user') . sprintf($sFileName, '_' . $iSize . '_square'));
 						}
 					}
-				}				
+					*/
+				}
 			
 				if (defined('PHPFOX_IS_HOSTED_SCRIPT'))
 				{

@@ -19,17 +19,52 @@
 		overflow:hidden;
 	}
 
+	.guest_login {
+		display:none;
+	}
+
+	#main-banner {
+		left:0px;
+	}
+
+	#page_core_index-visitor._is_guest_user #header, #page_core_index-visitor._is_guest_user #top {
+		display:block;
+	}
+
+	#page_core_index-visitor._is_guest_user .site_menu {
+		display:block;
+	}
+
+	#page_core_index-visitor._is_guest_user {
+		.register_menu {
+			display:none;
+		}
+
+		#panels {
+			max-width:400px;
+		}
+
+		#panels, #container {
+			display:block;
+			width:auto;
+		}
+	}
+
 	#main_header {
 		width:35px;
-		/*overflow:hidden;*/
 	}
 
 	#page_forum_thread div.sub_menu_bar_main, #page_forum_thread #content ._block_h1 {
 		left:35px;
+		padding-left:5px;
 	}
 
 	#main {
 		margin-left:35px;
+	}
+
+	.moderation_holder {
+		left:35px;
 	}
 
 	#container {
@@ -58,6 +93,42 @@
 		width:auto;
 	}
 
+	#show-side-panel {
+		position:fixed;
+		top:50%;
+		right:0px;
+		width:20px;
+		height:40px;
+		line-height:40px;
+		text-align:center;
+		margin-top:-20px;
+		z-index:20000;
+		background:rgba(0, 0, 0, 0.6);
+		border:3px;
+		cursor:pointer;
+
+		> span::before {
+			.fa('\f104');
+			font-size:20px;
+			line-height:40px;
+			color:#808080;
+		}
+	}
+
+	.show-side-panel-mode {
+		#panels {
+			display:block;
+			position:fixed;
+			top:0px;
+			right:0px;
+			bottom:0px;
+			z-index:10000;
+			background:@blockBg;
+			border-left:1px darken(@blockBg, 8%) solid;
+			padding:20px;
+		}
+	}
+
 	#panels {
 		display:none;
 	}
@@ -77,6 +148,14 @@
 }
 
 @media (max-device-width: 700px), (max-width: 700px) {
+
+	._app_photo .activity_feed_content_image img {
+		max-width:100%;
+	}
+
+	#page_photo_index #panel {
+		display:none;
+	}
 
 	.demo-buttons > ul li.tab {
 		display:none;
@@ -177,6 +256,8 @@
 
 	#content {
 		width:auto;
+		max-width:0px;
+		padding:0px;
 	}
 
 	#container, #main_footer_holder {
@@ -263,7 +344,38 @@
 		left:0px;
 	}
 
-	#page_profile_index #header {
+	#page_profile_index #header, #page_core_index-member #header {
 		display:block;
+	}
+
+    #page_core_index-member {
+	    #main {
+		    margin-top:@headerHeight;
+	    }
+    }
+
+	#page_forum_thread #content ._block_h1 {
+		position:relative;
+		top:auto;
+		left:auto;
+		z-index:1;
+		margin-bottom:5px;
+	}
+
+	.forum_header_menu {
+		position:static;
+		margin-bottom:20px;
+	}
+
+	.moderation_holder {
+		left:0px;
+	}
+
+	.show-side-panel-mode {
+		#panels {
+			left:0px;
+			right:0px;
+			width:auto;
+		}
 	}
 }

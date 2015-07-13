@@ -27,7 +27,7 @@ class Phpfox
 	/**
  	* Product Version : major.minor.maintenance [alphaX, betaX or rcX]
  	*/
-	const VERSION = '4.0.0';
+	const VERSION = '4.0.1';
 	
 	/**
 	 * Product Code Name
@@ -45,7 +45,7 @@ class Phpfox
 	 * Product build number.
 	 *
 	 */
-	const PRODUCT_BUILD = '1436468373';
+	const PRODUCT_BUILD = '1436814468';
 	
 	/**
 	 * phpFox API server.
@@ -106,8 +106,8 @@ class Phpfox
 		{
 			return self::VERSION;
 		}
-		
-		return Phpfox::getParam('core.phpfox_version');
+
+		return self::VERSION;
 	}
 
 	public static function isTrial()
@@ -265,6 +265,10 @@ class Phpfox
 	 */
 	public static function getParam($sVar)
 	{
+		if ($sVar == 'core.wysiwyg') {
+			return 'default';
+		}
+
 		if ($sVar == 'core.cache_plugins' && PHPFOX_DEBUG) {
 			return false;
 		}
@@ -1109,7 +1113,7 @@ class Phpfox
 			exit;
 		}
 
-		$aStaticFolders = ['file', 'static', 'module', 'apps', 'themes'];
+		$aStaticFolders = ['file', 'static', 'module', 'apps', 'Apps', 'themes'];
 		if (in_array($oReq->segment(1), $aStaticFolders) ||
 			(
 				$oReq->segment(1) == 'theme' && $oReq->segment(2) != 'demo'
@@ -1137,7 +1141,7 @@ class Phpfox
 			$HTTPCache->checkCache();
 
 			$sDir = PHPFOX_DIR;
-			if ($oReq->segment(1) == 'apps' || $oReq->segment(1) == 'themes') {
+			if ($oReq->segment(1) == 'Apps' || $oReq->segment(1) == 'apps' || $oReq->segment(1) == 'themes') {
 				$sDir = PHPFOX_DIR_SITE;
 			}
 			$sPath = $sDir . ltrim($sUri, '/');
@@ -1153,21 +1157,17 @@ class Phpfox
 			$sType = Phpfox_File::instance()->mime($sUri);
 			$sExt = Phpfox_File::instance()->extension($sUri);
 
-			if (false && !file_exists($sPath) && strpos($sPath, 'file/pic/user')) {
-				$parts = explode('pic/user/', $sPath);
-				$sub = explode('_', $parts[1]);
-				$sPath = $parts[0] . 'pic/user/' . $sub[0] . '.' . $sExt;
-			}
-
 			if (!file_exists($sPath)) {
-
+				$sPath = str_replace('PF.Base', 'PF.Base/..', $sPath);
 				// header('Content-type: ' . $sType);
-				header("HTTP/1.0 404 Not Found");
-				header('Content-type: application/json');
-				echo json_encode([
-					'error' => 404
-				]);
-				exit;
+				if (!file_exists($sPath)) {
+					header("HTTP/1.0 404 Not Found");
+					header('Content-type: application/json');
+					echo json_encode([
+						'error' => 404
+					]);
+					exit;
+				}
 			}
 
 			// header('Content-type: ' . $sType);

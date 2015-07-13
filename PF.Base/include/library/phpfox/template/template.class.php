@@ -1116,12 +1116,12 @@ class Phpfox_Template
 			if (!defined('PHPFOX_INSTALLER'))
 			{
 				$aJsVars['bWysiwyg'] = ((Phpfox::getParam('core.wysiwyg') != 'default' && Phpfox::getParam('core.allow_html')) ? true : false);
-				$aJsVars['sEditor'] = Phpfox::getParam('core.wysiwyg');	
+				$aJsVars['sEditor'] = Phpfox::getParam('core.wysiwyg');
 				$aJsVars['sJsCookiePath'] = Phpfox::getParam('core.cookie_path');
 				$aJsVars['sJsCookieDomain'] = Phpfox::getParam('core.cookie_domain');
 				$aJsVars['sJsCookiePrefix'] = Phpfox::getParam('core.session_prefix');	
 				$aJsVars['bPhotoTheaterMode'] = (Phpfox::isModule('photo') ? Phpfox::getParam('photo.view_photos_in_theater_mode') : false);
-				$aJsVars['bUseHTML5Video'] = ((Phpfox::isModule('video') && Phpfox::getParam('video.upload_for_html5')) ? true : false);
+				$aJsVars['bUseHTML5Video'] = false; // ((Phpfox::isModule('video') && Phpfox::getParam('video.upload_for_html5')) ? true : false);
 				if (Phpfox::isAdmin())
 				{
 					$aJsVars['sAdminCPLocation'] = Phpfox::getParam('admincp.admin_cp');
@@ -1914,6 +1914,8 @@ class Phpfox_Template
 	}
 
 	public function getFooter() {
+		$this->_sFooter .= '<div id="show-side-panel"><span></span></div>';
+
 		if (Phpfox::isAdmin() && !Phpfox::isAdminPanel()) {
 			$Url = Phpfox_Url::instance();
 			$this->_sFooter .= '<div id="pf_admin">';
@@ -2535,6 +2537,7 @@ class Phpfox_Template
 	 */
 	public function getMenu($sConnection = null)
 	{
+		$original = $sConnection;
 		$oCache = Phpfox::getLib('cache');
 		$oDb = Phpfox_Database::instance();
 		$oReq = Phpfox_Request::instance();
@@ -2670,9 +2673,21 @@ class Phpfox_Template
 				Phpfox::getLib('cache')->save($sUserMenuCache, $aUserMenusCache);
 			}
 		}
-		
+
 		foreach ($aMenus as $iKey => $aMenu)
 		{
+			/*
+			if (!isset($aMenu['url'])) {
+				$aMenus[$iKey] = [
+					'custom' => true,
+					'title' => array_keys($aMenu)[0],
+					'url' => array_values($aMenu)[0]
+				];
+
+				continue;
+			}
+			*/
+
 			if (substr($aMenu['url'], 0, 1) == '#')
 			{
 				$aMenus[$iKey]['css_name'] = 'js_core_menu_' . str_replace('#', '', str_replace('-', '_', $aMenu['url']));
@@ -2799,15 +2814,6 @@ class Phpfox_Template
 				continue;
 			}
 			
-			if ($sConnection == 'explore')
-			{
-				$aMenus[$iKey]['module_image'] = $this->getStyle('image', 'module/' . $aMenu['module'] . '.png');
-				if (!file_exists(str_replace(Phpfox::getParam('core.path'), PHPFOX_DIR, $aMenus[$iKey]['module_image'])))
-				{
-					unset($aMenus[$iKey]['module_image']);	
-				}
-			}
-			
 			if (isset($aMenu['children']))
 			{
 				foreach ($aMenu['children'] as $iChildKey => $aChild)
@@ -2821,7 +2827,24 @@ class Phpfox_Template
 		}
 				
 		return $aMenus;
-	}	
+	}
+
+	public function menu($title, $url, $extra = '') {
+		/*
+		$this->_menu[] = [
+			'custom' => true,
+			'title' => $title,
+			'url' => $url
+		];
+		*/
+		$this->assign('customMenu', [
+			'title' => $title,
+			'url' => $url,
+			'extra' => $extra
+		]);
+
+		return $this;
+	}
 	
 	/**
 	 * Set the current URL for the site.

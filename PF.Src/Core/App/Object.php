@@ -82,7 +82,7 @@ class Object extends \Core\Objectify {
 		$zipFile = PHPFOX_DIR_FILE . 'static/' . uniqid() . '.zip';
 		$zipArchive = new \ZipArchive();
 
-		if (!$zipArchive->open($zipFile, \ZIPARCHIVE::OVERWRITE)) {
+		if (!$zipArchive->open($zipFile, \ZIPARCHIVE::CREATE | \ZIPARCHIVE::OVERWRITE)) {
 			throw new \Exception('Unable to create ZIP archive.');
 		}
 
@@ -111,6 +111,8 @@ class Object extends \Core\Objectify {
 			if ($file instanceof \SplFileInfo) {
 				$filePath = $file->getRealPath();
 				$name = str_replace($directory->getRealPath(), '', $filePath);
+				$name = str_replace('\\', '/', $name);
+
 				$zipArchive->addFile($filePath, $name);
 			}
 		}
