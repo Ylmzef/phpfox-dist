@@ -45,7 +45,7 @@ class Phpfox
 	 * Product build number.
 	 *
 	 */
-	const PRODUCT_BUILD = '1436882133';
+	const PRODUCT_BUILD = '1436882895';
 	
 	/**
 	 * phpFox API server.
@@ -1288,7 +1288,7 @@ class Phpfox
 		{			
 			Phpfox::getService('log.session')->verifyToken();	
 		}
-		
+
 		(($sPlugin = Phpfox_Plugin::get('run')) ? eval($sPlugin) : false);
 	
 		if (!self::isAdminPanel())
